@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { query } from 'express';
 import { Pool } from 'pg';
 
 dotenv.config();
@@ -11,4 +12,12 @@ const client = new Pool({
   password: POSTGRES_PASSWORD,
 });
 
+// client.query((err, res) => {
+//   if(!err) {
+//     console.log(res.rows);
+//   } else {
+//     console.log(err.message)
+//   }
+//   client.end;
+// })
 export default client;
