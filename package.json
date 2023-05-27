@@ -12,7 +12,7 @@
     "prod": "concurrently 'npm run start:prod' 'npm run watch:ts'",
     "start:prod": "nodemon --watch dist dist/server.js",
     "watch:ts": "tsc --watch",
-    "test": "npm run build && jasmine --config=./jasmine.json",
+    "test": "npm run build && ENV=test db-migrate --env test up && jasmine --config=./jasmine.json && db-migrate db:drop test",
     "test:watch": "jasmine --config=./jasmine.json --watch"
   },
   "keywords": [],
