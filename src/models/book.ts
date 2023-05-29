@@ -5,7 +5,7 @@ export type Book = {
   id: number;
   title: string;
   author: string;
-  totalPages: number;
+  total_pages: number;
   summary: string;
 };
 
@@ -29,6 +29,7 @@ export class BookStore {
   async show(id: string): Promise<Book> {
     try {
       const sql = 'SELECT * FROM books WHERE id=($1)';
+
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -49,7 +50,7 @@ export class BookStore {
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [b.title, b.author, b.totalPages, b.summary]);
+      const result = await conn.query(sql, [b.title, b.author, b.total_pages, b.summary]);
 
       const book = result.rows[0];
 

@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-import { query } from 'express';
 import { Pool } from 'pg';
 
 dotenv.config();
@@ -13,6 +12,7 @@ const {
 } = process.env;
 
 let client;
+console.log(ENV);
 
 if (ENV === 'test') {
   client = new Pool({
@@ -32,12 +32,4 @@ if (ENV === 'dev') {
   });
 }
 
-// client.query((err, res) => {
-//   if(!err) {
-//     console.log(res.rows);
-//   } else {
-//     console.log(err.message)
-//   }
-//   client.end;
-// })
 export default client;

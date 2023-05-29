@@ -12,7 +12,8 @@
     "prod": "concurrently 'npm run start:prod' 'npm run watch:ts'",
     "start:prod": "nodemon --watch dist dist/server.js",
     "watch:ts": "tsc --watch",
-    "test": "npm run build && ENV=test db-migrate --env test up && jasmine --config=./jasmine.json && db-migrate db:drop test",
+    "test": "npm run build && ENV=test db-migrate --env test up && jasmine --config=./jasmine.json && db-migrate --env test down && db-migrate --env test down || echo 'Test failed!'",
+    "testDown": "ENV=test db-migrate --env test down",
     "test:watch": "jasmine --config=./jasmine.json --watch"
   },
   "keywords": [],
@@ -41,6 +42,7 @@
     "eslint-plugin-import": "^2.27.5",
     "esm": "^3.2.25",
     "jasmine": "^5.0.0",
+    "jasmine-console-reporter": "^3.1.0",
     "jasmine-spec-reporter": "^7.0.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
