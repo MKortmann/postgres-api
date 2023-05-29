@@ -79,4 +79,33 @@ export class BookStore {
       throw new Error(`Could not delete book ${id}. Error: ${err}`);
     }
   }
+
+  async update(id: string, b: Book): Promise<Book> {
+    try {
+      const sql =
+        'UPDATE books SET title=$1, author=$2, total_pages=$3, summary=$4 WHERE id=($5)';
+      // @ts-ignore
+      const conn = await Client.connect();
+
+      const result = await conn.query(sql, [
+        b.title,
+        b.author,
+        b.total_pages,
+        b.summary,
+        id,
+      ]);
+
+      const book = result.rows[0];
+
+      if (result.rowCount === 0) {
+        throw new Error(`Could not find book ${id} to update.`);
+      }
+
+      conn.release();
+
+      return book;
+    } catch (err) {
+      throw new Error(`Could not update book ${id}. Error: ${err}`);
+    }
+  }
 }
