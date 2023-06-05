@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const port = 3000;
+const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response, next: any) => {
   res.send('Hello, World!!!!');

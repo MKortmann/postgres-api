@@ -5,6 +5,5 @@ CREATE TABLE users (
   last_name VARCHAR(150),
   user_name VARCHAR(150),
   email VARCHAR(150),
-  salt VARCHAR(300),
-  password VARCHAR(150)
+  password_digest VARCHAR(150)
 );

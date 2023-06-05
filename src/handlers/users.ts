@@ -27,7 +27,7 @@ const user = async (req: Request, res: Response) => {
 };
 
 const createUser = async (req: Request, res: Response) => {
-  console.log(req);
+  // console.log(req);
   const user: any = {
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -35,6 +35,7 @@ const createUser = async (req: Request, res: Response) => {
     email: req.body.email,
     password: req.body.password,
   };
+  console.log(`user: ${JSON.stringify(user)}`);
   const result = await store.create(user);
   console.log(`user created: ${JSON.stringify(user)}`);
 

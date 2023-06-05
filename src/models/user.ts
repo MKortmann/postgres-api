@@ -1,4 +1,5 @@
 // @ts-ignore
+// import client from '../database';
 import Client from '../database';
 import bcrypt from 'bcrypt';
 
@@ -19,6 +20,8 @@ export type User = {
 };
 
 const users: User[] = [];
+const pepper = process.env.PEPPER;
+const salt_rounds = Number(process.env.SALT_ROUNDS);
 
 export class UserStore {
   async index(): Promise<Book[]> {
@@ -57,21 +60,23 @@ export class UserStore {
   async create(u: User): Promise<User> {
     try {
       const sql =
-        'INSERT INTO users (first_name, last_name, user_name, email, salt, password ) VALUES($1, $2, $3, $4, $5, $6) RETURNING *';
+        'INSERT INTO users (first_name, last_name, user_name, email, password_digest ) VALUES($1, $2, $3, $4, $5) RETURNING *';
       // @ts-ignore
       const conn = await Client.connect();
-      const salt = await bcrypt.genSalt(10);
+      console.log('generating salt');
+      const salt = await bcrypt.genSalt(salt_rounds);
+      console.log('generating hash');
 
-      const hash = bcrypt.hashSync(u.password + salt, parseInt('10'));
+      const hash = bcrypt.hashSync(u.password + pepper, parseInt('10'));
 
       const result = await conn.query(sql, [
         u.firstname,
         u.lastname,
         u.username,
         u.email,
-        salt,
         hash,
       ]);
+      console.log(`user: ${JSON.stringify(result.rows[0])}`);
       const user = result.rows[0];
 
       conn.release();
@@ -83,21 +88,15 @@ export class UserStore {
   }
 
   async authenticate(u: any): Promise<User | null> {
-    const sql = 'SELECT password, salt FROM users WHERE user_name=($1)';
+    const sql = 'SELECT password_digest FROM users WHERE user_name=($1)';
     // @ts-ignore
     const conn = await Client.connect();
-
     const result = await conn.query(sql, [u.username]);
 
     if (result.rows.length) {
       const user = result.rows[0];
-      console.log(`user.salt: ${user.salt}`);
-      const hash = bcrypt.hashSync(u.password + user.salt, 10);
-      console.log('user.password: ' + user.password);
-      console.log('hash: ' + hash);
-      console.log(JSON.stringify(bcrypt.compareSync(hash, user.password)));
 
-      if (await bcrypt.compare(hash, user.password)) {
+      if (await bcrypt.compare(u.password + pepper, user.password_digest)) {
         console.log('compared! Matched!');
         return user;
       }
