@@ -67,7 +67,7 @@ export class UserStore {
       const salt = await bcrypt.genSalt(salt_rounds);
       console.log('generating hash');
 
-      const hash = bcrypt.hashSync(u.password + pepper, parseInt('10'));
+      const hash = bcrypt.hashSync(u.password + pepper, salt);
 
       const result = await conn.query(sql, [
         u.firstname,
