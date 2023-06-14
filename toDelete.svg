@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+  <!-- Reinhard und Helga -->
+  <text x="150" y="50" text-anchor="middle" font-size="16" fill="black">Reinhard Kortmann</text>
+  <text x="150" y="70" text-anchor="middle" font-size="16" fill="black">Helga Kortmann</text>
+
+  <!-- Verbindungslinie -->
+  <line x1="150" y1="80" x2="150" y2="140" stroke="black"/>
+
+  <!-- Gerald -->
+  <circle cx="90" cy="150" r="20" fill="white" stroke="black"/>
+  <text x="90" y="150" text-anchor="middle" font-size="16" fill="black">Gerald Kortmann</text>
+
+  <!-- Helena -->
+  <circle cx="150" cy="150" r="20" fill="white" stroke="black"/>
+  <text x="150" y="150" text-anchor="middle" font-size="16" fill="black">Helena Kortmann</text>
+
+  <!-- Viktoria -->
+  <circle cx="210" cy="150" r="20" fill="white" stroke="black"/>
+  <text x="210" y="150" text-anchor="middle" font-size="16" fill="black">Viktoria Kortmann</text>
+</svg>

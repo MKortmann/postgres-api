@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { Book, BookStore } from '../models/book';
+import jwt from 'jsonwebtoken'
 
 const store = new BookStore();
 
@@ -34,7 +35,22 @@ const createBook = async (req: Request, res: Response) => {
     total_pages: req.body.total_pages,
     summary: req.body.summary,
   };
-  console.log(`book created: ${JSON.stringify(book)}`);
+  console.log(`book will be created: ${JSON.stringify(book)}`);
+
+
+    //the user can create a booked only if he has a token
+    try {
+      //verify the token
+      //BE CAREFUL: in real life the token should not be part of the body but from the request header. For many reasons as add seucrity...
+
+      jwt.verify(req.body.token, process.env.TOKEN_SECRET!)
+      console.log("token verified -  the book can be created")
+    } catch (err) {
+      res.status(401)
+      res.json(`Invalid token ${err}`)
+      return
+    }
+
   const result = await store.create(book);
 
   try {
