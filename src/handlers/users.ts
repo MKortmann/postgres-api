@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import { User, UserStore } from '../models/user';
 import jwt from 'jsonwebtoken';
 
+import { verifyAuthToken } from '../middleware/middleware';
+
 const store = new UserStore();
 
 // this is the express handler function
@@ -75,16 +77,16 @@ const createUser = async (req: Request, res: Response) => {
   }
 };
 
-const verifyAuthToken = (req: Request, res: Response, next: () => void) => {
-  try {
-      const authorizationHeader = req.headers.authorization;
-      const token = authorizationHeader?.split(' ')[1]!;
-      const decoded = jwt.verify(token, process.env.TOKEN_SECRET!)
-      next()
-  } catch (error) {
-      res.status(401)
-  }
-}
+// const verifyAuthToken = (req: Request, res: Response, next: () => void) => {
+//   try {
+//       const authorizationHeader = req.headers.authorization;
+//       const token = authorizationHeader?.split(' ')[1]!;
+//       const decoded = jwt.verify(token, process.env.TOKEN_SECRET!)
+//       next()
+//   } catch (error) {
+//       res.status(401)
+//   }
+// }
 
 
 

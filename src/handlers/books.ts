@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import { Book, BookStore } from '../models/book';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import { verifyAuthToken } from '../middleware/middleware';
 
 const store = new BookStore();
 
@@ -28,7 +29,7 @@ const book = async (req: Request, res: Response) => {
 };
 
 const createBook = async (req: Request, res: Response) => {
-  console.log(req);
+  // console.log(req);
   const book: any = {
     title: req.body.title,
     author: req.body.author,
@@ -37,19 +38,18 @@ const createBook = async (req: Request, res: Response) => {
   };
   console.log(`book will be created: ${JSON.stringify(book)}`);
 
+  //the user can create a booked only if he has a token
+  // try {
+  //verify the token
+  //BE CAREFUL: in real life the token should not be part of the body but from the request header. For many reasons as add seucrity...
 
-    //the user can create a booked only if he has a token
-    try {
-      //verify the token
-      //BE CAREFUL: in real life the token should not be part of the body but from the request header. For many reasons as add seucrity...
-
-      jwt.verify(req.body.token, process.env.TOKEN_SECRET!)
-      console.log("token verified -  the book can be created")
-    } catch (err) {
-      res.status(401)
-      res.json(`Invalid token ${err}`)
-      return
-    }
+  //   jwt.verify(req.body.token, process.env.TOKEN_SECRET!)
+  //   console.log("token verified -  the book can be created")
+  // } catch (err) {
+  //   res.status(401)
+  //   res.json(`Invalid token ${err}`)
+  //   return
+  // }
 
   const result = await store.create(book);
 
@@ -94,9 +94,9 @@ const deleteBook = async (req: Request, res: Response) => {
 const book_store_routes = (app: express.Application) => {
   app.get('/books', index);
   app.get('/book/:id', book);
-  app.post('/book', createBook);
-  app.put('/book/:id', editBook);
-  app.delete('/book/:id', deleteBook);
+  app.post('/book', verifyAuthToken, createBook);
+  app.put('/book/:id', verifyAuthToken, editBook);
+  app.delete('/book/:id', verifyAuthToken, deleteBook);
 };
 
 export default book_store_routes;
