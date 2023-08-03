@@ -82,8 +82,8 @@ const editBook = async (req: Request, res: Response) => {
 
 const deleteBook = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = store.delete(id);
   try {
+    const result = await store.delete(id);
     res.send(result);
   } catch (err) {
     res.status(400);
